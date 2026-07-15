@@ -34,6 +34,7 @@ const tutorialSkipBtn = document.querySelector("#tutorialSkipBtn");
 const bigTownGate = document.querySelector("#bigTownGate");
 const townReturnBtn = document.querySelector("#townReturnBtn");
 const townFishingBtn = document.querySelector("#townFishingBtn");
+const townExitBtn = document.querySelector("#townExitBtn");
 
 const seasons = ["봄", "여름", "가을", "겨울"];
 const placeInfo = {
@@ -842,6 +843,7 @@ document.querySelector("#tutorialBtn").addEventListener("click", openTutorial);
 bigTownGate.addEventListener("click", enterBigTown);
 townReturnBtn.addEventListener("click", returnToFarm);
 townFishingBtn.addEventListener("click", fish);
+townExitBtn.addEventListener("click", returnToFarm);
 stopMiniBtn.addEventListener("click", stopMiniGame);
 tutorialNextBtn.addEventListener("click", nextTutorialStep);
 tutorialSkipBtn.addEventListener("click", () => closeTutorial("튜토리얼을 건너뛰었습니다. 언제든 튜토리얼 버튼으로 다시 볼 수 있어요."));
