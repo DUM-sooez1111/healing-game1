@@ -12,11 +12,14 @@ const heartLabel = document.querySelector("#heartLabel");
 const inventoryList = document.querySelector("#inventoryList");
 const insectBook = document.querySelector("#insectBook");
 const insectBookText = document.querySelector("#insectBookText");
+const questTitle = document.querySelector("#questTitle");
+const questText = document.querySelector("#questText");
 const questProgress = document.querySelector("#questProgress");
 const miniGame = document.querySelector("#miniGame");
 const miniTitle = document.querySelector("#miniTitle");
 const miniText = document.querySelector("#miniText");
 const fishMiniScene = document.querySelector("#fishMiniScene");
+const farmMiniScene = document.querySelector("#farmMiniScene");
 const successZone = document.querySelector("#successZone");
 const timingCursor = document.querySelector("#timingCursor");
 const stopMiniBtn = document.querySelector("#stopMiniBtn");
@@ -28,6 +31,8 @@ const tutorialText = document.querySelector("#tutorialText");
 const tutorialProgress = document.querySelector("#tutorialProgress");
 const tutorialNextBtn = document.querySelector("#tutorialNextBtn");
 const tutorialSkipBtn = document.querySelector("#tutorialSkipBtn");
+const bigTownGate = document.querySelector("#bigTownGate");
+const townReturnBtn = document.querySelector("#townReturnBtn");
 
 const seasons = ["봄", "여름", "가을", "겨울"];
 const placeInfo = {
@@ -83,6 +88,12 @@ const state = {
   harvested: 0,
   harvestRewardClaimed: false,
   tutorialCompleted: false,
+  area: "farm",
+  soraQuest: {
+    accepted: false,
+    progress: 0,
+    completed: false,
+  },
   tools: {
     wateringCan: 1,
     fishingRod: 1,
@@ -206,7 +217,7 @@ function renderStats() {
   cropLabel.textContent = state.crops;
   heartLabel.textContent = state.hearts;
   timeLabel.textContent = timeName();
-  map.className = `map ${seasonClass(season)} ${timeClass()}`;
+  map.className = `map ${seasonClass(season)} ${timeClass()}${state.area === "bigTown" ? " big-town" : ""}`;
   inventoryList.innerHTML = `
     <span>물고기 ${state.fish}</span>
     <span>곤충 ${state.bugs}</span>
@@ -225,7 +236,26 @@ function renderStats() {
     const count = state.insects[key];
     return `<span class="insect-entry${count ? " discovered" : ""}">${count ? `${name} ${count}마리` : "미발견"}</span>`;
   }).join("");
-  questProgress.style.width = `${clamp((state.harvested / 2) * 100, 0, 100)}%`;
+  renderSoraQuest();
+}
+
+function renderSoraQuest() {
+  const quest = state.soraQuest;
+  if (!quest.accepted) {
+    questTitle.textContent = "소라의 부탁";
+    questText.textContent = "소라에게 대화해 퀘스트를 받아 보세요.";
+    questProgress.style.width = "0%";
+    return;
+  }
+  if (!quest.completed) {
+    questTitle.textContent = "소라의 채집 부탁";
+    questText.textContent = `곤충 몹 ${quest.progress} / 3마리 잡기`;
+    questProgress.style.width = `${clamp((quest.progress / 3) * 100, 0, 100)}%`;
+    return;
+  }
+  questTitle.textContent = "소라의 부탁 완료";
+  questText.textContent = "보상 90G와 호감도를 받았습니다.";
+  questProgress.style.width = "100%";
 }
 
 function seasonClass(season) {
@@ -423,6 +453,13 @@ function applySave(rawSave, title, message) {
       state.insects.butterfly = state.bugs;
     }
     state.tutorialCompleted = Boolean(state.tutorialCompleted);
+    state.area = state.area === "bigTown" ? "bigTown" : "farm";
+    state.soraQuest = {
+      accepted: false,
+      progress: 0,
+      completed: false,
+      ...state.soraQuest,
+    };
     state.tools = {
       wateringCan: 1,
       fishingRod: 1,
@@ -585,6 +622,7 @@ function startMiniGame(config) {
   miniTitle.textContent = config.title;
   miniText.textContent = config.text;
   fishMiniScene.classList.toggle("visible", config.type === "fish");
+  farmMiniScene.classList.toggle("visible", config.type === "harvest");
   successZone.style.left = `${config.successLeft}%`;
   successZone.style.width = `${config.successWidth}%`;
   timingCursor.style.animationDuration = `${config.duration}ms`;
@@ -616,6 +654,7 @@ function closeMiniGame() {
   activeMiniGame = null;
   timingCursor.classList.remove("running");
   fishMiniScene.classList.remove("visible");
+  farmMiniScene.classList.remove("visible");
   miniGame.classList.add("hidden");
 }
 
@@ -632,6 +671,24 @@ function cook() {
 
 function talk() {
   if (distanceTo(58, 30) > 18) return setMessage("대화", "주민 소라 근처에서 대화할 수 있습니다.");
+  if (!state.soraQuest.accepted) {
+    state.soraQuest.accepted = true;
+    setMessage("소라의 부탁", "큰마을 가는 길에서 곤충 몹이 늘었대요. 곤충 몹 3마리를 잡아 도감에 기록해 줄래요?");
+    renderStats();
+    return;
+  }
+  if (!state.soraQuest.completed && state.soraQuest.progress >= 3) {
+    state.soraQuest.completed = true;
+    state.gold += 90;
+    state.hearts += 2;
+    setMessage("소라의 보상", "도감 기록을 확인했어요! 90G와 호감도 2를 받았습니다.");
+    renderStats();
+    return;
+  }
+  if (!state.soraQuest.completed) {
+    setMessage("소라", `곤충 몹을 ${3 - state.soraQuest.progress}마리 더 잡아 주세요. 큰마을 가는 길도 열어 둘게요.`);
+    return;
+  }
   state.hearts += state.meals > 0 ? 2 : 1;
   if (state.meals > 0) state.meals -= 1;
   setMessage("소라", state.hearts >= 5 ? "소라가 농장에 놀러 오겠다고 합니다. 이제 마을이 조금 더 가까워졌어요." : "소라가 웃으며 말합니다. '첫 수확 작물은 꼭 보여줘요.'");
@@ -663,6 +720,23 @@ function moveToPlace(placeKey) {
   renderPlayer();
 }
 
+function enterBigTown() {
+  if (state.area === "bigTown") return;
+  state.area = "bigTown";
+  state.velocity = { x: 0, y: 0 };
+  setMessage("햇살 큰마을", "길을 따라 아래로 내려와 큰마을에 도착했습니다. 장터를 천천히 둘러보세요.");
+  renderStats();
+}
+
+function returnToFarm() {
+  state.area = "farm";
+  state.pos = { x: 51, y: 88 };
+  state.velocity = { x: 0, y: 0 };
+  setMessage("농장 길목", "큰마을에서 농장으로 돌아왔습니다.");
+  renderStats();
+  renderPlayer();
+}
+
 function walk() {
   const speed = keys.has("shift") ? 0.42 : 0.28;
   const acceleration = 0.18;
@@ -687,6 +761,12 @@ function walk() {
 
   state.pos.x = clamp(state.pos.x + state.velocity.x, 4, 96);
   state.pos.y = clamp(state.pos.y + state.velocity.y, 7, 95);
+
+  if (state.area === "farm" && state.pos.y >= 92 && state.pos.x >= 43 && state.pos.x <= 62) {
+    enterBigTown();
+    requestAnimationFrame(walk);
+    return;
+  }
 
   const moved = Math.hypot(state.velocity.x, state.velocity.y) > 0.015;
   if (moved) {
@@ -735,6 +815,7 @@ document.querySelectorAll("[data-insect]").forEach((button) => {
     button.classList.add("caught");
     state.bugs += 1;
     state.insects[insectType] += 1;
+    if (state.soraQuest.accepted && !state.soraQuest.completed) state.soraQuest.progress = Math.min(3, state.soraQuest.progress + 1);
     state.level += levelGain;
     setMessage("몹 채집", `Lv.${mobLevel} ${insectNames[insectType]} 몹을 잡았습니다! 채집 레벨 Lv.${state.level} (+${levelGain})`);
     renderStats();
@@ -757,6 +838,8 @@ document.querySelector("#nextDayBtn").addEventListener("click", nextDay);
 document.querySelector("#saveBtn").addEventListener("click", saveGame);
 document.querySelector("#loadBtn").addEventListener("click", loadGame);
 document.querySelector("#tutorialBtn").addEventListener("click", openTutorial);
+bigTownGate.addEventListener("click", enterBigTown);
+townReturnBtn.addEventListener("click", returnToFarm);
 stopMiniBtn.addEventListener("click", stopMiniGame);
 tutorialNextBtn.addEventListener("click", nextTutorialStep);
 tutorialSkipBtn.addEventListener("click", () => closeTutorial("튜토리얼을 건너뛰었습니다. 언제든 튜토리얼 버튼으로 다시 볼 수 있어요."));
