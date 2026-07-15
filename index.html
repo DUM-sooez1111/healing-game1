@@ -33,6 +33,9 @@
           <div class="path path-main"></div>
           <div class="path path-cross"></div>
           <div class="path path-home"></div>
+          <button class="place town-gate" id="bigTownGate" aria-label="길을 따라 큰마을로 이동">
+            <span>큰마을<br>↓</span>
+          </button>
 
 
           <button class="place home" data-place="home" aria-label="집">
@@ -68,6 +71,17 @@
           <div class="deco tree tree-c"></div>
           <div class="deco tree tree-d"></div>
           <div class="deco tree tree-e"></div>
+
+          <section class="big-town" id="bigTown" aria-label="큰마을">
+            <p class="eyebrow">큰마을</p>
+            <h2>햇살 큰마을</h2>
+            <p>아래 길을 따라 도착한 활기찬 장터 마을입니다.</p>
+            <div class="town-road"></div>
+            <div class="town-market market-a"><span>장터</span></div>
+            <div class="town-market market-b"><span>카페</span></div>
+            <div class="town-fountain"></div>
+            <button class="town-return" id="townReturnBtn">농장으로 돌아가기 ↑</button>
+          </section>
 
           <div class="player" id="player" aria-label="플레이어"></div>
         </div>
@@ -164,7 +178,7 @@
         <section class="quest">
           <p class="eyebrow">퀘스트</p>
           <h3 id="questTitle">첫 수확의 날</h3>
-          <p id="questText">작물 2개 수확하기</p>
+          <p id="questText">소라에게서 퀘스트 받기</p>
           <div class="quest-bar"><span id="questProgress"></span></div>
         </section>
       </aside>
@@ -184,6 +198,9 @@
           <span class="pixel-fish"></span>
           <span class="pixel-ripple ripple-a"></span>
           <span class="pixel-ripple ripple-b"></span>
+        </div>
+        <div class="mini-scene farm-scene" id="farmMiniScene" aria-label="농사 미니게임 장면">
+          <img src="assets/farming-mini-game.png" alt="물을 주며 작물을 돌보는 농장" />
         </div>
         <div class="timing-track">
           <span class="success-zone" id="successZone"></span>
