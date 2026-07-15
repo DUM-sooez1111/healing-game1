@@ -292,12 +292,27 @@ h1 {
   overflow: hidden;
   padding: 7% 8%;
   background:
-    radial-gradient(circle at 18% 22%, rgba(255, 244, 181, 0.52) 0 7%, transparent 8%),
-    linear-gradient(#8fcde5 0 30%, #9acb74 30% 100%);
+    linear-gradient(180deg, rgba(26, 69, 70, 0.18), rgba(26, 69, 70, 0.04) 34%, rgba(255, 248, 223, 0.12)),
+    url("assets/big-town.png") center / cover no-repeat;
 }
 
 .map.big-town .big-town {
   display: block;
+}
+
+.big-town::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255, 248, 223, 0.28), transparent 42%);
+}
+
+.big-town .eyebrow {
+  position: relative;
+  z-index: 2;
+  color: #f8f0ce;
+  text-shadow: 1px 1px 0 #466f66;
 }
 
 .big-town h2 {
@@ -355,6 +370,12 @@ h1 {
   border-radius: 50%;
   background: #7fc5d8;
   box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.town-road,
+.town-market,
+.town-fountain {
+  display: none;
 }
 
 .town-return {
