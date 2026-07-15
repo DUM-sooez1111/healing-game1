@@ -372,6 +372,22 @@ h1 {
   cursor: pointer;
 }
 
+.town-fishing {
+  position: absolute;
+  z-index: 2;
+  left: 7%;
+  bottom: 6%;
+  padding: 10px 12px;
+  border: 2px solid #496f80;
+  border-radius: 12px;
+  background: #dff5f1;
+  color: #315766;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #80aeb8;
+}
+
 .place {
   cursor: pointer;
   border: 0;
