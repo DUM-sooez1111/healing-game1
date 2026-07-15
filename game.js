@@ -33,6 +33,7 @@ const tutorialNextBtn = document.querySelector("#tutorialNextBtn");
 const tutorialSkipBtn = document.querySelector("#tutorialSkipBtn");
 const bigTownGate = document.querySelector("#bigTownGate");
 const townReturnBtn = document.querySelector("#townReturnBtn");
+const townFishingBtn = document.querySelector("#townFishingBtn");
 
 const seasons = ["봄", "여름", "가을", "겨울"];
 const placeInfo = {
@@ -575,7 +576,7 @@ function sellBug() {
 }
 
 function fish() {
-  if (distanceTo(82, 69) > 22) return setMessage("낚시", "호수 근처에서 낚시할 수 있습니다.");
+  if (state.area !== "bigTown" && distanceTo(82, 69) > 22) return setMessage("낚시", "농장 호수 또는 큰마을 낚시터 근처에서 낚시할 수 있습니다.");
   startFishingMiniGame();
 }
 
@@ -840,6 +841,7 @@ document.querySelector("#loadBtn").addEventListener("click", loadGame);
 document.querySelector("#tutorialBtn").addEventListener("click", openTutorial);
 bigTownGate.addEventListener("click", enterBigTown);
 townReturnBtn.addEventListener("click", returnToFarm);
+townFishingBtn.addEventListener("click", fish);
 stopMiniBtn.addEventListener("click", stopMiniGame);
 tutorialNextBtn.addEventListener("click", nextTutorialStep);
 tutorialSkipBtn.addEventListener("click", () => closeTutorial("튜토리얼을 건너뛰었습니다. 언제든 튜토리얼 버튼으로 다시 볼 수 있어요."));
