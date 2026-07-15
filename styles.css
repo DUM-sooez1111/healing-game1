@@ -270,6 +270,108 @@ h1 {
   transform: rotate(20deg);
 }
 
+.town-gate {
+  left: 44%;
+  bottom: 1%;
+  width: 18%;
+  min-width: 104px;
+  height: 48px;
+  border: 2px solid #765038;
+  border-radius: 14px 14px 0 0;
+  background: rgba(255, 247, 211, 0.92);
+  color: #5c432e;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.big-town {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  display: none;
+  overflow: hidden;
+  padding: 7% 8%;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 244, 181, 0.52) 0 7%, transparent 8%),
+    linear-gradient(#8fcde5 0 30%, #9acb74 30% 100%);
+}
+
+.map.big-town .big-town {
+  display: block;
+}
+
+.big-town h2 {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(28px, 5vw, 48px);
+  color: #61412f;
+  text-shadow: 2px 2px 0 #fff8df;
+}
+
+.big-town > p:not(.eyebrow) {
+  position: relative;
+  z-index: 2;
+  margin: 8px 0;
+  color: #4a624a;
+  font-weight: 900;
+}
+
+.town-road {
+  position: absolute;
+  left: 43%;
+  top: 24%;
+  width: 18%;
+  height: 76%;
+  border-radius: 45% 45% 0 0;
+  background: #d6b579;
+  border: 2px solid rgba(139, 94, 48, 0.45);
+}
+
+.town-market {
+  position: absolute;
+  z-index: 1;
+  width: 23%;
+  height: 22%;
+  display: grid;
+  place-items: end center;
+  padding-bottom: 10px;
+  border: 4px solid #754d36;
+  border-radius: 16px 16px 4px 4px;
+  color: #fff8df;
+  font-weight: 900;
+  box-shadow: inset 0 34px 0 #e6875d;
+}
+
+.market-a { left: 12%; top: 44%; background: #c98b5d; }
+.market-b { right: 12%; top: 48%; background: #8bb5a1; box-shadow: inset 0 34px 0 #4c7b72; }
+
+.town-fountain {
+  position: absolute;
+  left: 46%;
+  top: 48%;
+  width: 12%;
+  aspect-ratio: 1;
+  border: 7px solid #8a7657;
+  border-radius: 50%;
+  background: #7fc5d8;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.town-return {
+  position: absolute;
+  z-index: 2;
+  right: 7%;
+  bottom: 6%;
+  padding: 10px 12px;
+  border: 2px solid #765038;
+  border-radius: 12px;
+  background: #fff8df;
+  color: #5c432e;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
 .place {
   cursor: pointer;
   border: 0;
@@ -1083,6 +1185,22 @@ h1 {
     #9bd3da;
   background-size: 16px 16px;
   border: 3px solid #5b7b86;
+}
+
+.farm-scene.visible {
+  display: block;
+  overflow: hidden;
+  height: 180px;
+  margin: 12px 0;
+  border: 3px solid #6b8450;
+  background: #b8dc8b;
+}
+
+.farm-scene img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .pixel-sky,
